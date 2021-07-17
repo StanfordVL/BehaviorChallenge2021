@@ -1,8 +1,9 @@
 import numpy as np
 
-ACTION_DIM = 2
-LINEAR_VEL_DIM = 0
-ANGULAR_VEL_DIM = 1
+ACTION_DIM = 26
+IMG_WIDTH = 128
+IMG_HEIGHT = 128
+PROPRIOCEPTION_DIM = 20
 
 
 class RandomAgent:
@@ -17,25 +18,15 @@ class RandomAgent:
         return action
 
 
-class ForwardOnlyAgent(RandomAgent):
-    def act(self, observations):
-        action = np.zeros(ACTION_DIM)
-        action[LINEAR_VEL_DIM] = 1.0
-        action[ANGULAR_VEL_DIM] = 0.0
-        return action
-
-
 if __name__ == "__main__":
     obs = {
-        'depth': np.ones((180, 320, 1)),
-        'rgb': np.ones((180, 320, 3)),
-        'sensor': np.ones((2,))
+        "rgb": np.ones((IMG_HEIGHT, IMG_WIDTH, 3)),
+        "depth": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "seg": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "ins_seg": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "highlight": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "proprioception": np.ones((PROPRIOCEPTION_DIM,)),
     }
-
     agent = RandomAgent()
     action = agent.act(obs)
-    print('action', action)
-
-    agent = ForwardOnlyAgent()
-    action = agent.act(obs)
-    print('action', action)
+    print("action", action)

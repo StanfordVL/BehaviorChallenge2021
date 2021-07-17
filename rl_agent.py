@@ -1,222 +1,36 @@
-import numpy as np
-from IPython import embed
 import collections
 import os
 
-import tensorflow as tf
+import numpy as np
+import torch
+from IPython import embed
+from stable_baselines3 import PPO
 
-from tf_agents.agents.ddpg import critic_network
-from tf_agents.agents.sac import sac_agent
-from tf_agents.networks import actor_distribution_network
-from tf_agents.networks import normal_projection_network
-from tf_agents.networks.utils import mlp_layers
-from tf_agents.policies import greedy_policy
-from tf_agents.policies import py_tf_policy
-from tf_agents.utils import common
-from tf_agents.trajectories.time_step import TimeStep
-from tensorflow.python.framework.tensor_spec import TensorSpec, BoundedTensorSpec
-
-IMG_WIDTH = 320
-IMG_HEIGHT = 180
-TASK_OBS_DIM = 4
-
-def normal_projection_net(action_spec,
-                          init_action_stddev=0.35,
-                          init_means_output_factor=0.1):
-    del init_action_stddev
-    return normal_projection_network.NormalProjectionNetwork(
-        action_spec,
-        mean_transform=None,
-        state_dependent_std=True,
-        init_means_output_factor=init_means_output_factor,
-        std_transform=sac_agent.std_clip_transform,
-        scale_distribution=True)
+IMG_WIDTH = 128
+IMG_HEIGHT = 128
+PROPRIOCEPTION_DIM = 20
 
 
-class SACAgent:
-    def __init__(
-            self,
-            root_dir,
-            conv_1d_layer_params=[(32, 8, 4), (64, 4, 2), (64, 3, 1)],
-            conv_2d_layer_params=[(32, (8, 8), 4), (64, (4, 4), 2), (64, (3, 3), 2)],
-            encoder_fc_layers=[256],
-            actor_fc_layers=[256],
-            critic_obs_fc_layers=[256],
-            critic_action_fc_layers=[256],
-            critic_joint_fc_layers=[256],
-            # Params for target update
-            target_update_tau=0.005,
-            target_update_period=1,
-            # Params for train
-            actor_learning_rate=3e-4,
-            critic_learning_rate=3e-4,
-            alpha_learning_rate=3e-4,
-            td_errors_loss_fn=tf.compat.v1.losses.mean_squared_error,
-            gamma=0.99,
-            reward_scale_factor=1.0,
-            gradient_clipping=None,
-            # Params for eval
-            eval_deterministic=False,
-            # Params for summaries and logging
-            debug_summaries=False,
-            summarize_grads_and_vars=False
-    ):
-        '''A simple train and eval for SAC.'''
-        tf.compat.v1.enable_resource_variables()
-
-        root_dir = os.path.expanduser(root_dir)
-        policy_dir = os.path.join(root_dir, 'train', 'policy')
-
-        time_step_spec = TimeStep(
-            TensorSpec(shape=(), dtype=tf.int32, name='step_type'),
-            TensorSpec(shape=(), dtype=tf.float32, name='reward'),
-            BoundedTensorSpec(shape=(), dtype=tf.float32, name='discount',
-                              minimum=np.array(0., dtype=np.float32), maximum=np.array(1., dtype=np.float32)),
-            collections.OrderedDict({
-                'task_obs': BoundedTensorSpec(shape=(TASK_OBS_DIM,), dtype=tf.float32, name=None,
-                                            minimum=np.array(-3.4028235e+38, dtype=np.float32),
-                                            maximum=np.array(3.4028235e+38, dtype=np.float32)),
-                'depth': BoundedTensorSpec(shape=(IMG_HEIGHT, IMG_WIDTH, 1), dtype=tf.float32, name=None,
-                                           minimum=np.array(-1.0, dtype=np.float32),
-                                           maximum=np.array(1.0, dtype=np.float32)),
-                'rgb': BoundedTensorSpec(shape=(IMG_HEIGHT, IMG_WIDTH, 3), dtype=tf.float32, name=None,
-                                         minimum=np.array(-1.0, dtype=np.float32),
-                                         maximum=np.array(1.0, dtype=np.float32)),
-            })
-        )
-        observation_spec = time_step_spec.observation
-        action_spec = BoundedTensorSpec(shape=(2,), dtype=tf.float32, name=None,
-                                        minimum=np.array(-1.0, dtype=np.float32),
-                                        maximum=np.array(1.0, dtype=np.float32))
-
-        glorot_uniform_initializer = tf.compat.v1.keras.initializers.glorot_uniform()
-        preprocessing_layers = {}
-        if 'rgb' in observation_spec:
-            preprocessing_layers['rgb'] = tf.keras.Sequential(mlp_layers(
-                conv_1d_layer_params=None,
-                conv_2d_layer_params=conv_2d_layer_params,
-                fc_layer_params=encoder_fc_layers,
-                kernel_initializer=glorot_uniform_initializer,
-            ))
-
-        if 'depth' in observation_spec:
-            preprocessing_layers['depth'] = tf.keras.Sequential(mlp_layers(
-                conv_1d_layer_params=None,
-                conv_2d_layer_params=conv_2d_layer_params,
-                fc_layer_params=encoder_fc_layers,
-                kernel_initializer=glorot_uniform_initializer,
-            ))
-
-        if 'task_obs' in observation_spec:
-            preprocessing_layers['task_obs'] = tf.keras.Sequential(mlp_layers(
-                conv_1d_layer_params=None,
-                conv_2d_layer_params=None,
-                fc_layer_params=encoder_fc_layers,
-                kernel_initializer=glorot_uniform_initializer,
-            ))
-
-        if len(preprocessing_layers) <= 1:
-            preprocessing_combiner = None
-        else:
-            preprocessing_combiner = tf.keras.layers.Concatenate(axis=-1)
-
-        actor_net = actor_distribution_network.ActorDistributionNetwork(
-            observation_spec,
-            action_spec,
-            preprocessing_layers=preprocessing_layers,
-            preprocessing_combiner=preprocessing_combiner,
-            fc_layer_params=actor_fc_layers,
-            continuous_projection_net=normal_projection_net,
-            kernel_initializer=glorot_uniform_initializer,
-        )
-
-        critic_net = critic_network.CriticNetwork(
-            (observation_spec, action_spec),
-            preprocessing_layers=preprocessing_layers,
-            preprocessing_combiner=preprocessing_combiner,
-            observation_fc_layer_params=critic_obs_fc_layers,
-            action_fc_layer_params=critic_action_fc_layers,
-            joint_fc_layer_params=critic_joint_fc_layers,
-            kernel_initializer=glorot_uniform_initializer,
-        )
-
-        global_step = tf.compat.v1.train.get_or_create_global_step()
-        tf_agent = sac_agent.SacAgent(
-            time_step_spec,
-            action_spec,
-            actor_network=actor_net,
-            critic_network=critic_net,
-            actor_optimizer=tf.compat.v1.train.AdamOptimizer(
-                learning_rate=actor_learning_rate),
-            critic_optimizer=tf.compat.v1.train.AdamOptimizer(
-                learning_rate=critic_learning_rate),
-            alpha_optimizer=tf.compat.v1.train.AdamOptimizer(
-                learning_rate=alpha_learning_rate),
-            target_update_tau=target_update_tau,
-            target_update_period=target_update_period,
-            td_errors_loss_fn=td_errors_loss_fn,
-            gamma=gamma,
-            reward_scale_factor=reward_scale_factor,
-            gradient_clipping=gradient_clipping,
-            debug_summaries=debug_summaries,
-            summarize_grads_and_vars=summarize_grads_and_vars,
-            train_step_counter=global_step)
-
-        config = tf.compat.v1.ConfigProto()
-        config.gpu_options.allow_growth = True
-        self.sess = tf.compat.v1.Session(config=config)
-
-        if eval_deterministic:
-            self.eval_py_policy = py_tf_policy.PyTFPolicy(greedy_policy.GreedyPolicy(tf_agent.policy))
-        else:
-            self.eval_py_policy = py_tf_policy.PyTFPolicy(tf_agent.policy)
-
-        policy_checkpointer = common.Checkpointer(
-            ckpt_dir=policy_dir,
-            policy=tf_agent.policy,
-            global_step=global_step)
-
-        with self.sess.as_default():
-            # Initialize graph.
-            policy_checkpointer.initialize_or_restore(self.sess)
-
-        # activate the session
-        obs = {
-            'depth': np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
-            'rgb': np.ones((IMG_HEIGHT, IMG_WIDTH, 3)),
-            'task_obs': np.ones((TASK_OBS_DIM,))
-        }
-        action = self.act(obs)
-        print('activate TF session')
-        print('action', action)
+class PPOAgent(object):
+    def __init__(self, ckpt_path="checkpoints/onboard_sensing_ppo_random"):
+        self.agent = PPO.load(ckpt_path)
 
     def reset():
         pass
 
     def act(self, obs):
-        batch_obs = {}
-        for key in obs:
-            batch_obs[key] = np.expand_dims(obs[key], axis=0)
-        time_step = TimeStep(
-            np.ones(1),
-            np.ones(1),
-            np.ones(1),
-            batch_obs,
-        )
-        policy_state = ()
-
-        with self.sess.as_default():
-            action_step = self.eval_py_policy.action(time_step, policy_state)
-            action = action_step.action[0]
-            return action
+        return self.agent.predict(obs, deterministic=True)[0]
 
 
 if __name__ == "__main__":
     obs = {
-        'depth': np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
-        'rgb': np.ones((IMG_HEIGHT, IMG_WIDTH, 3)),
-        'task_obs': np.ones((TASK_OBS_DIM,))
+        "rgb": np.ones((IMG_HEIGHT, IMG_WIDTH, 3)),
+        "depth": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "seg": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "ins_seg": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "highlight": np.ones((IMG_HEIGHT, IMG_WIDTH, 1)),
+        "proprioception": np.ones((PROPRIOCEPTION_DIM,)),
     }
-    agent = SACAgent(root_dir='test')
+    agent = PPOAgent(ckpt_path="checkpoints/onboard_sensing_ppo_random")
     action = agent.act(obs)
-    print('action', action)
+    print("action", action)
