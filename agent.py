@@ -1,6 +1,6 @@
 import argparse
 
-from igibson.challenge.challenge import Challenge
+from igibson.challenge.behavior_challenge import BehaviorChallenge
 
 from rl_agent import PPOAgent
 from simple_agent import RandomAgent
@@ -21,7 +21,7 @@ def main():
     args = parser.parse_args()
 
     agent = get_agent(agent_class=args.agent_class, ckpt_path=args.ckpt_path)
-    challenge = Challenge()
+    challenge = BehaviorChallenge()
     challenge.submit(agent)
 
 

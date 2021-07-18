@@ -15,7 +15,7 @@ class PPOAgent(object):
     def __init__(self, ckpt_path="checkpoints/onboard_sensing_ppo_random"):
         self.agent = PPO.load(ckpt_path)
 
-    def reset():
+    def reset(self):
         pass
 
     def act(self, obs):
