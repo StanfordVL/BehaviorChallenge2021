@@ -143,7 +143,7 @@ Train with train split (with all eight training scenes): `./train_locally.sh --d
   ```
 - Step 3: install [iGibson](http://svl.stanford.edu/igibson/) **from source** by following the [documentation](http://svl.stanford.edu/igibson/docs).
 
-- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place it at `igibson/data`.
+- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place `ig_dataset` under `igibson/data` and `igibson.key` under `igibson/`.
 
 - Step 5: start training with stable-baselines3!
   ```
