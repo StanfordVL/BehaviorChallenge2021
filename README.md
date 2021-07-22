@@ -88,7 +88,7 @@ Participate in the contest by registering on the EvalAI challenge page and creat
 
 - Step 4: 
 
-  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9).
+  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9). Place `ig_dataset` and `igibson.key` under `BehaviorChallenge2021`.
 
 - Step 5:
 
@@ -124,10 +124,9 @@ Our iGibson Challenge 2021 consists of four phases:
 
 ### Training
 #### Using Docker
-TBA
-<!-- Train with minival split (with only one of the training scene: Rs_int): `./train_minival_locally.sh --docker-name my_submission`
+Train with minival split (with only one of the activities): `./train_minival_locally.sh --docker-name my_submission`.
 
-Train with train split (with all eight training scenes): `./train_locally.sh --docker-name my_submission` -->
+Note that due to the difficulty of BEHAVIOR activities, the default training with PPO will NOT converge to success. We provide this training pipeline just as a starting point for participants to further build upon.
 
 #### Not using Docker
 - Step 0: install [anaconda](https://docs.anaconda.com/anaconda/install/) and create a python3.6 environment
@@ -143,7 +142,7 @@ Train with train split (with all eight training scenes): `./train_locally.sh --d
   ```
 - Step 3: install [iGibson](http://svl.stanford.edu/igibson/) **from source** by following the [documentation](http://svl.stanford.edu/igibson/docs).
 
-- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place `ig_dataset` under `igibson/data` and `igibson.key` under `igibson/`.
+- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place `ig_dataset` and `igibson.key` under `igibson/data`.
 
 - Step 5: start training with stable-baselines3!
   ```
