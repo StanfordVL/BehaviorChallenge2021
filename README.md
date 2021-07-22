@@ -88,7 +88,7 @@ Participate in the contest by registering on the EvalAI challenge page and creat
 
 - Step 4: 
 
-  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9). Place `ig_dataset` and `igibson.key` under `BehaviorChallenge2021` and set its permission `chmod -R 777 ig_dataset`.
+  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9). Place `ig_dataset` and `igibson.key` under `BehaviorChallenge2021`.
 
 - Step 5:
 
@@ -142,7 +142,7 @@ Note that due to the difficulty of BEHAVIOR activities, the default training wit
   ```
 - Step 3: install [iGibson](http://svl.stanford.edu/igibson/) **from source** by following the [documentation](http://svl.stanford.edu/igibson/docs).
 
-- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place `ig_dataset` under `igibson/data` and `igibson.key` under `igibson/`.
+- Step 4: Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9), and place `ig_dataset` and `igibson.key` under `igibson/data`.
 
 - Step 5: start training with stable-baselines3!
   ```
