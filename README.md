@@ -124,10 +124,9 @@ Our iGibson Challenge 2021 consists of four phases:
 
 ### Training
 #### Using Docker
-TBA
-<!-- Train with minival split (with only one of the training scene: Rs_int): `./train_minival_locally.sh --docker-name my_submission`
+Train with minival split (with only one of the activities): `./train_minival_locally.sh --docker-name my_submission`.
 
-Train with train split (with all eight training scenes): `./train_locally.sh --docker-name my_submission` -->
+Note that due to the difficulty of BEHAVIOR activities, the default training with PPO will NOT converge to success. We provide this training pipeline just as a starting point for participants to further build upon.
 
 #### Not using Docker
 - Step 0: install [anaconda](https://docs.anaconda.com/anaconda/install/) and create a python3.6 environment
