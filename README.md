@@ -88,7 +88,7 @@ Participate in the contest by registering on the EvalAI challenge page and creat
 
 - Step 4: 
 
-  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9).
+  Download the challenge data by completing the user agreement (https://forms.gle/ecyoPtEcCBMrQ3qF9). Place `ig_dataset` and `igibson.key` under `BehaviorChallenge2021` and set its permission `chmod -R 777 ig_dataset`.
 
 - Step 5:
 

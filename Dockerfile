@@ -1,4 +1,4 @@
-FROM gibsonchallenge/gibson_challenge_2021:latest
+FROM igibson/behavior_challenge_2021:latest
 ENV PATH /miniconda/envs/gibson/bin:$PATH
 
 ADD agent.py /agent.py

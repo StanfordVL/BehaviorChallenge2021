@@ -20,9 +20,9 @@ esac
 done
 
 
-docker run -it -v $(pwd)/gibson_challenge_data_2021:/opt/iGibson/gibson2/data \
+docker run -v $(pwd)/igibson.key:/opt/iGibson/igibson/data/igibson.key -v $(pwd)/ig_dataset:/opt/iGibson/igibson/data/ig_dataset \
     --runtime=nvidia \
     ${DOCKER_NAME} \
     /bin/bash -c \
-    "export CONFIG_FILE=/opt/iGibson/gibson2/examples/configs/locobot_social_nav.yaml; export LOG_DIR=test; cd /opt/agents/tf_agents/agents/sac/examples/v1; ./train_minival.sh"
- 
+    "export CONFIG_FILE=/opt/iGibson/igibson/examples/configs/behavior_onboard_sensing.yaml; export PHASE=minival; cd /opt/iGibson/igibson/examples/demo; python stable_baselines3_behavior_example.py"
+
