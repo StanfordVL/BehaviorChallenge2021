@@ -2,11 +2,16 @@ BEHAVIOR Challenge @ ICCV2021
 =============================================
 
 This repository contains starter code for BEHAVIOR Challenge 2021 brought to you by [Stanford Vision and Learning Lab](http://svl.stanford.edu).
-For an overview of the challenge and the workshop and information about the tasks, evaluation metrics, datasets and setup, visit [the challenge website](http://svl.stanford.edu/behavior/challenge.html).
+For an overview of the challenge and the workshop and information about the tasks, evaluation metrics, datasets and setup, visit [the challenge website](https://behavior.stanford.edu/).
+
+For more information or questions, contact us at behavior.benchmark@gmail.com
 
 Participation Guidelines
 -----------------------------
-Participate in the contest by registering on the EvalAI challenge page and creating a team. Participants will upload docker containers with their agents that evaluated on a AWS GPU-enabled instance. Before pushing the submissions for remote evaluation, participants should test the submission docker locally to make sure it is working. Instructions for training, local evaluation, and online submission are provided below.
+
+In the following, we summarize the most relevant points to participate. For a full description, visit the online [BEHAVIOR Participation Guidelines](https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.7h8v0rnlggnt). 
+
+Participate in the contest by registering on the EvalAI challenge page and creating a team. In the Minival and Evaluation phases, participants will upload docker containers with their agents that evaluated on a AWS GPU-enabled instance. Before pushing the submissions for remote evaluation, participants should test the submission docker locally to make sure it is working. Instructions for training, local evaluation, and online submission are provided below.
 
 ### Local Evaluation
 - Step 1: Clone the challenge repository
