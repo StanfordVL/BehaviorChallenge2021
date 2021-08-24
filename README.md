@@ -11,7 +11,7 @@ Participation Guidelines
 
 In the following, we summarize the most relevant points to participate. For a full description, visit the online [BEHAVIOR Participation Guidelines](https://docs.google.com/document/d/1u2m9Ld6Qo3eG-fvCzuAZN6lHxwpVVBlwLVdzo_WDlNI/edit#heading=h.7h8v0rnlggnt). 
 
-Participate in the contest by registering on the EvalAI challenge page and creating a team. In the Minival and Evaluation phases, participants will upload docker containers with their agents that evaluated on a AWS GPU-enabled instance. Before pushing the submissions for remote evaluation, participants should test the submission docker locally to make sure it is working. Instructions for training, local evaluation, and online submission are provided below.
+Participate in the contest by registering on the [EvalAI challenge page](https://eval.ai/web/challenges/challenge-page/1190/overview) and creating a team. In the Minival and Evaluation phases, participants will upload docker containers with their agents that evaluated on a AWS GPU-enabled instance. Before pushing the submissions for remote evaluation, participants should test the submission docker locally to make sure it is working. Instructions for training, local evaluation, and online submission are provided below.
 
 ### Local Evaluation
 - Step 1: Clone the challenge repository
