@@ -1,4 +1,4 @@
-BEHAVIOR Challenge 2021 @ CVPR2021 Embodied AI Workshop
+BEHAVIOR Challenge @ ICCV2021 Embodied AI Workshop
 =============================================
 
 This repository contains starter code for BEHAVIOR Challenge 2021 brought to you by [Stanford Vision and Learning Lab](http://svl.stanford.edu).
