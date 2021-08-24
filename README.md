@@ -71,9 +71,8 @@ Participate in the contest by registering on the EvalAI challenge page and creat
 - Step 2: Install nvidia-docker2, following the guide: https://github.com/nvidia/nvidia-docker/wiki/Installation-(version-2.0). 
 
 - Step 3: Modify the provided Dockerfile to accommodate any dependencies. A minimal Dockerfile is shown below.
-  TODO: add the correct base docker 
   ```Dockerfile
-  FROM gibsonchallenge/gibson_challenge_2021:latest
+  FROM igibson/behavior_challenge_2021:latest
   ENV PATH /miniconda/envs/gibson/bin:$PATH
 
   ADD agent.py /agent.py
@@ -114,7 +113,7 @@ evalai push my_submission:latest --phase <phase-name>
 
 The valid challenge phases are: `behavior-minival-onboard-sensing-1190`, `behavior-minival-full-observability-1190`, `behavior-dev-onboard-sensing-1190`, `behavior-dev-full-observability-1190`, `behavior-test-onboard-sensing-1190`, `behavior-test-full-observability-1190`.
 
-Our iGibson Challenge 2021 consists of four phases:
+Our BEHAVIOR Challenge 2021 consists of four phases:
 
 - Minival Phase (`behavior-minival-onboard-sensing-1190`, `behavior-minival-full-observability-1190`): The purpose of this phase to make sure your policy can be successfully submitted and evaluated. Participants are expected to download our starter code and submit a baseline policy, even a trivial one, to our evaluation server to verify their entire pipeline is correct. The submission will only be evaluated on one activity.
 - Dev Phase (`behavior-dev-onboard-sensing-1190`, `behavior-dev-full-observability-1190`): This phase is split into Onboard Sensing and Full Observability tracks. Participants are expected to submit their solutions to **each** of the tasks separately because they have different observation spaces. The results will be evaluated on the dataset **dev** split and the leaderboard will be updated within 24 hours.
