@@ -24,7 +24,6 @@ docker run -v $(pwd)/igibson.key:/opt/iGibson/igibson/data/igibson.key -v $(pwd)
     --gpus=all \
     ${DOCKER_NAME} \
     /bin/bash -c \
-    "export CONFIG_FILE=/opt/iGibson/igibson/examples/configs/behavior_onboard_sensing.yaml; export PHASE=minival; export OUTPUT_DIR=/results; bash submission.sh"
-    
-# make sure CONFIG_FILE, TASK and EPISODE_DIR are consistent
-# you can use TASK environment variable to switch agent in agent.py
+    "export CONFIG_FILE=/opt/iGibson/igibson/examples/configs/behavior_onboard_sensing.yaml; export SPLIT=minival; export OUTPUT_DIR=/results; bash submission.sh"
+
+# for older docker versions, use --runtime=nvidia instead of --gpus=all
