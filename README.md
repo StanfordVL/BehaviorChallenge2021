@@ -47,9 +47,19 @@ Participate in the contest by registering on the [EvalAI challenge page](https:/
 
 - Step 5:
 
-  Evaluate locally:
+  Evaluate locally for minival split:
 
   You can run `./test_minival_locally.sh --docker-name my_submission`
+  
+  Evaluate locally for dev split:
+
+  You can run `./test_dev_locally.sh --docker-name my_submission`
+
+- Step 6 (dev phase only):
+  
+  For dev phase, we ask participants to evaluate their own results and add evaluation results to docker:
+
+  You can run `docker build . -f Dockerfile_add_results -t my_submission_with_results``
   
   <!-- The script by default evaluates Social Navigation. If you want to evaluate Interactive Navigation, you need to change `CONFIG_FILE`, `TASK` and `EPISODE_DIR` in the script and make them consistent. It's recommended that you use TASK environment variable to switch agents in `agent.py` if you intend to use different policies for these two tasks. -->
 
@@ -64,7 +74,10 @@ pip install "evalai>=1.2.3"
 evalai set_token <your EvalAI participant token>
 
 # Push docker image to EvalAI docker registry
+# for minival and test
 evalai push my_submission:latest --phase <phase-name>
+# for dev
+evalai push my_submission_with_results:latest --phase <phase-name>
 ```
 
 The valid challenge phases are: `behavior-minival-onboard-sensing-1190`, `behavior-minival-full-observability-1190`, `behavior-dev-onboard-sensing-1190`, `behavior-dev-full-observability-1190`, `behavior-test-onboard-sensing-1190`, `behavior-test-full-observability-1190`.
