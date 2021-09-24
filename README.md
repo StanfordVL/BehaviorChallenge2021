@@ -59,7 +59,7 @@ Participate in the contest by registering on the [EvalAI challenge page](https:/
   
   For dev phase, we ask participants to evaluate their own results and add evaluation results to docker:
 
-  You can run `docker build . -f Dockerfile_add_results -t my_submission_with_results``
+  You can run `docker build . -f Dockerfile_add_results -t my_submission_with_results`
   
   <!-- The script by default evaluates Social Navigation. If you want to evaluate Interactive Navigation, you need to change `CONFIG_FILE`, `TASK` and `EPISODE_DIR` in the script and make them consistent. It's recommended that you use TASK environment variable to switch agents in `agent.py` if you intend to use different policies for these two tasks. -->
 
