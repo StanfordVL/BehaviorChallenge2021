@@ -133,3 +133,18 @@ Feel free to skip Step 5 if you want to use other frameworks for training. This 
 [4] [RVO2 Library: Reciprocal Collision Avoidance for Real-Time Multi-Agent Simulation](https://gamma.cs.unc.edu/RVO2/). Jur van den Berg, Stephen J. Guy, Jamie Snape, Ming C. Lin, and Dinesh Manocha, 2011.
 
 [5] [Robot Navigation in Constrained Pedestrian Environments using Reinforcement Learning](https://arxiv.org/abs/2010.08600) Claudia Pérez-D'Arpino, Can Liu, Patrick Goebel, Roberto Martín-Martín and Silvio Savarese. Preprint arXiv:2010.08600, 2020. -->
+
+
+Acknowledgments
+-----------------------------
+
+BEHAVIOR Challenge and its underlying simulation engine iGibson use code from a few open source repositories. Without the efforts of these folks (and their willingness to release their implementations under permissable copyleft licenses), BEHAVIOR would not be possible. We thanks these authors for their efforts!
+
+- Syoyo Fujita: [tinyobjloader](https://github.com/syoyo/tinyobjloader)
+- Erwin Coumans: [egl_example](https://github.com/erwincoumans/egl_example)
+- Caelan Garrett: [ss-pybullet](https://github.com/caelan/ss-pybullet)
+- Sean Barrett: [stb](https://github.com/nothings/stb)
+- Michał Siejak: [PBR](https://github.com/Nadrin/PBR)
+- Valve Software: [OpenVR](https://github.com/ValveSoftware/openvr)
+- [CryptoPP](https://www.cryptopp.com/)
+
