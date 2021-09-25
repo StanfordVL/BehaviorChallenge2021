@@ -21,8 +21,9 @@ done
 
 
 docker run -v $(pwd)/igibson.key:/opt/iGibson/igibson/data/igibson.key -v $(pwd)/ig_dataset:/opt/iGibson/igibson/data/ig_dataset \
-    --runtime=nvidia \
+    --gpus=all \
     ${DOCKER_NAME} \
     /bin/bash -c \
-    "export CONFIG_FILE=/opt/iGibson/igibson/examples/configs/behavior_onboard_sensing.yaml; export PHASE=minival; cd /opt/iGibson/igibson/examples/demo; python stable_baselines3_behavior_example.py"
+    "export CONFIG_FILE=/opt/iGibson/igibson/examples/configs/behavior_onboard_sensing.yaml; export SPLIT=minival; cd /opt/iGibson/igibson/examples/demo; python stable_baselines3_behavior_example.py"
 
+# for older docker versions, use --runtime=nvidia instead of --gpus=all
